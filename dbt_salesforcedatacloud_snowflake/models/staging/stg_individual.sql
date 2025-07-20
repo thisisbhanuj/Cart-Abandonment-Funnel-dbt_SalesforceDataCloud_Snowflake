@@ -1,0 +1,1 @@
+SELECT * FROM {{ source('ssot', 'ssot__Individual__dlm') }}

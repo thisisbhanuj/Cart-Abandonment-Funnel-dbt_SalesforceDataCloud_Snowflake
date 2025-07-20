@@ -1,0 +1,21 @@
+version: 2
+sources:
+  - name: ssot
+    database: WEBSITE_ENGAGEMENT_DATA_SHARE_00DGL000006CKP7UAG
+    schema: schema_Snowflake_Data_Share
+    # https://docs.getdbt.com/reference/resource-properties/quoting
+    quoting:
+      database: true
+      schema: true
+      identifier: false
+    tables:
+      - name: ssot__ShoppingCartEngagement__dlm
+        quoting:
+          database: true
+          schema: true
+          identifier: true
+      - name: ssot__Individual__dlm
+        quoting:
+          database: true
+          schema: true
+          identifier: true

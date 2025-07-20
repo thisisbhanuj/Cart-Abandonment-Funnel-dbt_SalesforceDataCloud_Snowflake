@@ -1,0 +1,24 @@
+version: 2
+models:
+  - name: stg_cart_sessions
+    description: "Latest cart activity per session (individualId)"
+    columns:
+      - name: ssot__IndividualId__c
+        data_tests:
+          - not_null
+      - name: lastCartActivity
+        data_tests:
+          - not_null
+      - name: cartEventCount
+
+  - name: fct_cart_abandonment_by_day_segmented
+    description: "Abandoned cart sessions segmented into HOT/WARM/COLD"
+    columns:
+      - name: EMAIL
+        data_tests:
+          - not_null
+      - name: segmentLabel
+    data_tests:
+          - not_null
+          - accepted_values:
+              values: ["HOT", "WARM", "COLD"]
