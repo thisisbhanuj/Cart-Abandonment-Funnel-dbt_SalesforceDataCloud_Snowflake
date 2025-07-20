@@ -15,6 +15,27 @@ We leverage:
 
 ---
 
+## 🛠️ Environment Setup (Python Virtualenv + dbt)
+
+We use `virtualenv` to isolate the dbt environment.
+
+### 1. Create & activate virtual environment
+
+```bash
+# Create virtual environment
+python3 -m venv .venv
+# Always activate your .venv before running any dbt commands.
+# Activate it (Linux/macOS)
+source .venv/bin/activate
+
+# Or on Windows
+.venv\Scripts\activate
+
+# Install dbt for Snowflake
+pip install dbt-snowflake==1.9.0
+
+---
+
 ## 🏗️ Project Structure
 
 ```bash
