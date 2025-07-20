@@ -4,6 +4,7 @@ models:
     description: "Latest cart activity per session (individualId)"
     columns:
       - name: ssot__IndividualId__c
+        quote: true # # Data Share from Salesforce Data Cluoud is quoted, so we need them as true.
         data_tests:
           - not_null
       - name: lastCartActivity
@@ -18,7 +19,7 @@ models:
         data_tests:
           - not_null
       - name: segmentLabel
-    data_tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: ["HOT", "WARM", "COLD"]

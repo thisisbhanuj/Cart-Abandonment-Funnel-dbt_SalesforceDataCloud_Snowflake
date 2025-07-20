@@ -4,6 +4,7 @@ sources:
     database: WEBSITE_ENGAGEMENT_DATA_SHARE_00DGL000006CKP7UAG
     schema: schema_Snowflake_Data_Share
     # https://docs.getdbt.com/reference/resource-properties/quoting
+    # Data Share from Salesforce Data Cluoud is quoted, so we need them as true.
     quoting:
       database: true
       schema: true
