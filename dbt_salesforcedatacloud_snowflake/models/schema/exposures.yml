@@ -1,0 +1,12 @@
+version: 2
+exposures:
+  - name: cart_abandonment_dashboard
+    label: Cart Abandonment Funnel
+    type: dashboard
+    maturity: high
+    url: https://bhanuj.app/
+    depends_on:
+      - ref('fct_cart_abandonment_by_day_segmented')
+    owner:
+      name: Bhanuj
+      email: tobhanuj.kashyap@gmail.com
