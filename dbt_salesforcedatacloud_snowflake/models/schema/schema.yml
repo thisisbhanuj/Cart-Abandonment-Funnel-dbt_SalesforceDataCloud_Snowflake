@@ -12,6 +12,7 @@ seeds:
         last_session_activity: timestamp_ltz
         start_date: timestamp_ltz
         end_date: timestamp_ltz
+        is_deleted: string
 
 models:
   - name: stg_cart_sessions

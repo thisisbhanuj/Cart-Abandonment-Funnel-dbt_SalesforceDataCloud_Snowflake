@@ -15,6 +15,9 @@ SELECT
     ROW_NUMBER() OVER (PARTITION BY party_id ORDER BY session_starts) AS session_number,
     CAST(
         (LAG(last_session_activity) OVER (PARTITION BY party_id ORDER BY session_starts)) AS TIMESTAMP_LTZ
-    ) AS previous_session_end
-FROM {{ ref('cart_sessions_snapshot_seed') }}
-WHERE is_deleted = 'False'
+    ) AS previous_session_end,
+    is_deleted
+FROM 
+    {{ ref('cart_sessions_snapshot_seed') }}
+WHERE 
+    is_deleted = 'False'

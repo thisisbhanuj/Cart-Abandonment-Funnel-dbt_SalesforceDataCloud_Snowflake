@@ -24,7 +24,9 @@ WITH sessions_with_lag AS (
       ORDER BY session_starts
     ) AS previous_session_end
   FROM 
-    {{ ref('stg_cart_sessions_from_seed') }}
+    {{ ref('stg_cart_sessions_from_seed') }} -- FROM {{ ref('snapshot_cart_sessions') }}
+  WHERE 
+    is_deleted = 'False'
 ),
 
 reactivated_sessions AS (
