@@ -8,7 +8,7 @@ sources:
     quoting:
       database: true
       schema: true
-      identifier: false
+      identifier: true
     tables:
       - name: ssot__ShoppingCartEngagement__dlm
         quoting:
