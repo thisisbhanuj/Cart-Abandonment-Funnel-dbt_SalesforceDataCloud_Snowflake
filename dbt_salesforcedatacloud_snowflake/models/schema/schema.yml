@@ -1,4 +1,18 @@
 version: 2
+
+seeds:
+  # Purpose: Dummy input table to simulate DLO snapshot (ecommerce cart and session data from Salesforce Data Cloud)
+  # dbt seed --select cart_sessions_snapshot_seed
+  - name: cart_sessions_snapshot_seed
+    config:
+      column_types:
+        party_id: string
+        session_id: string
+        session_starts: timestamp_ltz
+        last_session_activity: timestamp_ltz
+        start_date: timestamp_ltz
+        end_date: timestamp_ltz
+
 models:
   - name: stg_cart_sessions
     description: "Latest cart activity per session (individualId)"
@@ -23,3 +37,34 @@ models:
           - not_null
           - accepted_values:
               values: ["HOT", "WARM", "COLD"]
+
+  - name: cart_reactivated_users
+    description: "Flags users who return and add to cart after a long inactivity period (e.g., >30 days),
+      using session snapshots to detect reactivation."
+    columns:
+      - name: party_id
+        description: Unique identifier for the user.
+        data_tests:
+          - not_null
+
+      - name: session_id
+        description: Session identifier during which reactivation occurred.
+        data_tests:
+          - not_null
+
+      - name: session_starts
+        description: Timestamp when this session started.
+
+      - name: last_session_activity
+        description: Timestamp when this session ended.
+
+      - name: previous_session_end
+        description: Timestamp of the user last session before the current one.
+
+      - name: days_since_last_session
+        description: Number of days between this and previous session.
+
+      - name: is_reactivated
+        description: Boolean flag indicating user was inactive for more than threshold period and returned.
+        data_tests:
+          - not_null
