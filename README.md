@@ -1,4 +1,4 @@
-# Retail Abandonment Funnel using Snowflake + dbt + SDFC + External Functions
+# Retail Abandonment Funnel using Snowflake + dbt + Salesforce Data Cloud + External Functions
 
 An enterprise-grade dbt project for modeling cart abandonment behavior using Salesforce Data Cloud Behavioral Events and Snowflake Secure Data Shares.
 
