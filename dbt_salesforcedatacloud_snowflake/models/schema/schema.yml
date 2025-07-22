@@ -16,7 +16,7 @@ seeds:
 
 models:
   - name: stg_cart_sessions
-    description: "Latest cart activity per session (individualId)"
+    description: Latest cart activity per session (individualId)
     columns:
       - name: ssot__IndividualId__c
         quote: true # # Data Share from Salesforce Data Cluoud is quoted, so we need them as true.
@@ -28,7 +28,7 @@ models:
       - name: cartEventCount
 
   - name: fct_cart_abandonment_by_day_segmented
-    description: "Abandoned cart sessions segmented into HOT/WARM/COLD"
+    description: Abandoned cart sessions segmented into HOT/WARM/COLD
     columns:
       - name: EMAIL
         data_tests:
@@ -39,9 +39,9 @@ models:
           - accepted_values:
               values: ["HOT", "WARM", "COLD"]
 
-  - name: cart_reactivated_users
-    description: "Flags users who return and add to cart after a long inactivity period (e.g., >30 days),
-      using session snapshots to detect reactivation."
+  - name: fct_cart_reactivated_users
+    description: Flags users who return and add to cart after a long inactivity period (e.g., >30 days),
+      using session snapshots to detect reactivation.
     columns:
       - name: reactivation_event_id
         description: Unique identifier for the Data Cloud DLO.
@@ -75,3 +75,57 @@ models:
         description: Boolean flag indicating user was inactive for more than threshold period and returned.
         data_tests:
           - not_null
+
+  - name: reactivated_user_sessions_snapshot
+    description: >
+      Identifies reactivated users by comparing session gaps >30 days and joins with their original session cohort.
+    columns:
+      - name: reactivation_event_id
+        description: Unique ID per reactivation event
+        data_tests:
+          - not_null
+          - unique
+
+      - name: party_id
+        description: Salesforce Party ID
+
+      - name: session_id
+        description: Reactivated session ID
+
+      - name: session_number
+        description: Nth session for that user
+
+      - name: gap_days
+        description: Days between last session and this one
+
+      - name: engagement_timestamp
+        description: Date of reactivation event
+
+      - name: reactivation_flag
+        description: Label showing reactivation ("reactivated")
+
+      - name: cohort_month
+        description: YYYY-MM cohort of first session (if joined with dim_users or derived)
+
+  - name: fct_reactivated_users__cohort_monthly
+    description: >
+      Monthly cohort fact table for reactivated users who returned 
+      after at least 30 days of inactivity. Enables behavioral analysis 
+      and reactivation cohorting.
+    columns:
+      - name: party_id
+        description: Unique user identifier.
+        data_tests: 
+          - not_null
+
+      - name: session_id
+        description: Session ID when the user reactivated.
+
+      - name: session_starts
+        description: Timestamp when the reactivation session started.
+
+      - name: cohort_month
+        description: The cohort month the user was reactivated in.
+
+      - name: gap_days
+        description: Days since the last session.
