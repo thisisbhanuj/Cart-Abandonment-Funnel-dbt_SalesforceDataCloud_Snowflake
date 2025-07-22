@@ -43,6 +43,12 @@ models:
     description: "Flags users who return and add to cart after a long inactivity period (e.g., >30 days),
       using session snapshots to detect reactivation."
     columns:
+      - name: reactivation_event_id
+        description: Unique identifier for the Data Cloud DLO.
+        data_tests:
+          - not_null
+          - unique
+        
       - name: party_id
         description: Unique identifier for the user.
         data_tests:

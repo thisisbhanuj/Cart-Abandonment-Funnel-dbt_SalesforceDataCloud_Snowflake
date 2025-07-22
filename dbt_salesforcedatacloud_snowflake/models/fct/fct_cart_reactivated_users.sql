@@ -38,12 +38,13 @@ reactivated_sessions AS (
     DATEDIFF(DAY, previous_session_end, session_starts) > 30
 )
 
-SELECT 
+SELECT
+  MD5(CONCAT_WS('|', party_id, session_id, session_starts)) AS reactivation_event_id,
   party_id,
   session_id,
   session_starts,
   last_session_activity,
-  start_date,
+  start_date as engagement_timestamp,
   end_date,
   session_number,
   previous_session_end,
