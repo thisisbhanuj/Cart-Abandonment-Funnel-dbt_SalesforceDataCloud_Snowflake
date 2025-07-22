@@ -1,13 +1,15 @@
-{{ 
+{% snapshot reactivated_user_sessions_snapshot %}
+
+{{
     config(
-        materialized='incremental',
-        unique_key='session_id'
-    ) 
+        target_schema='snapshots',
+        unique_key='reactivation_event_id',
+        strategy='check',
+        check_cols=['reactivation_flag', 'gap_days']
+    )
 }}
 
--- If incremental, consider full-refresh to reset schema, if schema changed
-
-WITH sessions_with_lag AS (
+WITH ordered_sessions AS (
   SELECT
     party_id,
     session_id,
@@ -23,19 +25,16 @@ WITH sessions_with_lag AS (
       PARTITION BY party_id 
       ORDER BY session_starts
     ) AS previous_session_end
-  FROM 
-    {{ ref('stg_cart_sessions_from_seed') }}
-  WHERE 
-    is_deleted = 'False'
+  FROM {{ ref('stg_cart_sessions_from_seed') }}
+  WHERE is_deleted = 'False'
 ),
 
 reactivated_sessions AS (
   SELECT *,
     DATEDIFF(DAY, previous_session_end, session_starts) AS gap_days
-  FROM sessions_with_lag
-  WHERE 
-    session_number > 1 AND 
-    DATEDIFF(DAY, previous_session_end, session_starts) > 30
+  FROM ordered_sessions
+  WHERE session_number > 1
+    AND DATEDIFF(DAY, previous_session_end, session_starts) > 30
 )
 
 SELECT
@@ -44,10 +43,12 @@ SELECT
   session_id,
   session_starts,
   last_session_activity,
-  start_date as engagement_timestamp,
+  start_date AS engagement_timestamp,
   end_date,
   session_number,
   previous_session_end,
   gap_days,
   'reactivated' AS reactivation_flag
 FROM reactivated_sessions
+
+{% endsnapshot %}
