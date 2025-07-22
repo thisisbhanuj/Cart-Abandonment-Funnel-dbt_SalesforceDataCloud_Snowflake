@@ -2,7 +2,7 @@
 
 {{
     config(
-        target_schema='snapshots',
+        target_schema='SNAPSHOTS',
         unique_key='reactivation_event_id',
         strategy='check',
         check_cols=['reactivation_flag', 'gap_days']
